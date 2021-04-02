@@ -16,7 +16,7 @@ namespace AcrUnleashed.Webhooks
         [FunctionName("OnImagePushed")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = "images/push")] HttpRequest req,
-            [CosmosDB(databaseName: "acr", collectionName: "pushes", ConnectionStringSetting = "CosmosDbConStr")]IAsyncCollector<ImagePush> items,
+            //[CosmosDB(databaseName: "acr", collectionName: "pushes", ConnectionStringSetting = "CosmosDbConStr")]IAsyncCollector<ImagePush> items,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
@@ -24,6 +24,8 @@ namespace AcrUnleashed.Webhooks
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             log.LogInformation(requestBody);
             dynamic data = JsonConvert.DeserializeObject(requestBody);
+            return new StatusCodeResult(204);
+            /*
             if (data != null && "ping".Equals(data.action.ToString(), StringComparison.InvariantCultureIgnoreCase))
             {
                 return new StatusCodeResult(204);
@@ -41,7 +43,7 @@ namespace AcrUnleashed.Webhooks
                 });
                 return new OkResult();
             }
-            return new BadRequestObjectResult("Invalid payload received");
+            return new BadRequestObjectResult("Invalid payload received");*/
         }
     }
 }
